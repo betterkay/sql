@@ -1,0 +1,35 @@
+On commit: the view will refresh once the table is updated
+
+On demand: the view will not refresh automatically. But it will refresh when you need. Using the following query
+exec dbms mview.refresh('sales_d_mv')
+
+Materialiezed Views with Refersh Fast
+
+step1: fist create a Materialized view Log
+
+CREATE MATERALIZED VIEW LOG ON sales
+WITH PRIMARY KEY
+INCLUDING NEW VALUES
+
+OR 
+
+CREATE MATERIALIZED VIEW LOG ON  sales
+WITH ROWID
+INCLUDING NEW VALUES;
+
+step2: Now create the materialized view for fast regresh
+CREATE MATERALIZED VIEWE SALES_F_MV
+BUILD IMMEDIATE
+REGRESH FAST
+ON DEMAND
+AS
+SELECT S.SALES_DATE, S.RODER_ID, S.PRODUCT_ID, S.CUSTOEMR_ID,S.SALESPERSON_ID, S.QUANTIYT, S.UNIT_PRICE, S.SALES_AMOUNT, S.TAX_AMOUNT, S.TOTAL_AMOUNT, P.PRODUCT_NAME
+FROM SALES A, PRODUCT P
+WHERE S.PRODUCT_ID = P.PRODUCT_ID
+
+
+Timeing the refresh
+
+   refresh every 7 days: start with sysdate next sysdate + 7
+
+   refresh every minute: start with sysdate next sysdate + 1/(244* 60)

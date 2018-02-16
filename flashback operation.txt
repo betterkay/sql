@@ -1,0 +1,15 @@
+Flashback Query allows the contents of a table to be queried with reference to a specific point in time, using the AS OF clause.
+
+select *
+from customer as of timestamp
+to_timestamp('2015-08-13 13:34:12','YYYY-MM-DD HH24:MI:SS');
+
+Tracking changes in data
+
+select versions_startscb, versions_starttime, versions_endscn, versions_endtime, versions_xid, versions_operations, region
+from customer
+     versions between timestamp
+     to_timestamp('2015-10-14 19:50:00', 'YYYY-MM-DD HH24:MI:SS')
+where customer_id =12;
+
+show parameter retention
